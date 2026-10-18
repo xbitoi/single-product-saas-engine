@@ -1,0 +1,102 @@
+@tailwind base;
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
+  font-family: var(--font-sans);
+}
+
+/* ---- Dark mode: broad overrides so every surface flips consistently ---- */
+.dark .bg-white {
+  background-color: #0f172a;
+}
+.dark .bg-white\/80,
+.dark .bg-white\/85,
+.dark .bg-white\/95 {
+  background-color: rgba(15, 23, 42, 0.85);
+}
+.dark .bg-slate-50 {
+  background-color: #111c2e;
+}
+.dark .bg-slate-100 {
+  background-color: #0b1220;
+}
+.dark .text-slate-900 {
+  color: #e2e8f0;
+}
+.dark .text-slate-800 {
+  color: #e2e8f0;
+}
+.dark .text-slate-700 {
+  color: #cbd5e1;
+}
+.dark .text-slate-600 {
+  color: #94a3b8;
+}
+.dark .border-slate-200 {
+  border-color: #1e293b;
+}
+.dark .border-slate-100 {
+  border-color: #182238;
+}
+.dark .border-slate-300 {
+  border-color: #334155;
+}
+.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #182238;
+}
+.dark .hover\:bg-slate-50:hover {
+  background-color: #152238;
+}
+.dark .hover\:bg-slate-100:hover {
+  background-color: #17253d;
+}
+.dark input,
+.dark textarea,
+.dark select {
+  background-color: #0b1220;
+  color: #e2e8f0;
+}
+.dark .shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+}
+
+
+/* thin scrollbars inside chat + tables */
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-slate-300;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@layer utilities {
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+}

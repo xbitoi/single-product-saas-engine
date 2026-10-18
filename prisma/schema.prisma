@@ -1,0 +1,91 @@
+// Single Product SaaS Engine - data model
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  PAID
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+/// A store product. One is featured (the hero of the landing page); the rest
+/// are shown in the collection grid. isActive=false hides it from the storefront.
+model Product {
+  id             String    @id @default(cuid())
+  title          String
+  description    String    @db.Text
+  price          Float
+  compareAtPrice Float?
+  currency       String    @default("USD")
+  images         String[]
+  features       String[]
+  sourceUrl      String?
+
+  eyebrow        String?
+  storyTitle     String?
+  storyText      String?   @db.Text
+  closingTitle   String?
+  closingText    String?   @db.Text
+
+  isActive       Boolean   @default(true)
+  isFeatured     Boolean   @default(false)
+  position       Int       @default(0)
+  archivedAt     DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  orders Order[]
+
+  @@index([isActive])
+  @@index([isFeatured])
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  customerName    String
+  email           String
+  phone           String
+  address         String      @db.Text
+  productId       String?
+  product         Product?    @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productTitle    String
+  amount          Float
+  currency        String      @default("USD")
+  paypalOrderId   String?     @unique
+  paypalCaptureId String?
+  status          OrderStatus @default(PAID)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+/// Singleton settings row (id = "global").
+model Setting {
+  id                  String   @id @default("global")
+  telegramBotToken    String?
+  telegramChatId      String?
+  chatbotEnabled      Boolean  @default(true)
+  chatbotSystemPrompt String?  @db.Text
+  chatbotTone         String?  @default("friendly-professional")
+  aiProvider          String   @default("gemini")
+  aiApiKey            String?
+  aiModel             String?
+  adminPasswordHash   String?
+  authEnabled         Boolean  @default(true)
+  defaultLanguage     String   @default("en")
+  paypalClientId      String?
+  paypalSecret        String?
+  paypalMode          String   @default("sandbox")
+  paypalMerchantName  String?
+  updatedAt           DateTime @updatedAt
+}
